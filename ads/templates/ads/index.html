@@ -8,5 +8,9 @@ List of ads
 {% endblock %}
 
 {% block content %}
-
+    {% for ad in ads %}
+    <p>
+        {{ ad.title }}
+    </p>
+    {% endfor %}
 {% endblock %}

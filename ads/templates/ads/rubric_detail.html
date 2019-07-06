@@ -1,0 +1,16 @@
+{% extends "base.html"%}
+{% block title %}
+{{ rubric.name }} advertisements
+{% endblock %}
+
+{% block content_title %}
+    Advertisements for "{{ rubric.name }}" rubric:
+{% endblock %}
+
+{% block content %}
+    {% for ad in ads %}
+        <div class = 'ad'>
+            <a href="{{ url_for('ads.ad_detail', slug=ad.slug)}}">{{ ad.title }}</a>
+        </div>
+    {% endfor %}
+{% endblock %}

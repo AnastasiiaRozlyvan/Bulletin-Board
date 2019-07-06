@@ -4,11 +4,20 @@
 {% endblock %}
 
 {% block content_title %}
-{{ ad.title }}
+    {{ ad.title }}
 {% endblock %}
 
+
+
 {% block content %}
-    <p>
+    <div class = 'rubrics'>
+        {% for r in rubrics %}
+         <a href = "{{ url_for('ads.rubric_detail', slug=r.slug)}}">
+             <span class="badge badge-info">{{ r.name }}</span>
+         </a>
+        {% endfor %}
+    </div>
+    <div class = 'main-content'>
         {{ ad.body }}
-    </p>
+    </div>
 {% endblock %}

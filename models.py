@@ -4,8 +4,15 @@ import re
 
 
 def slugify(s):
-    pattern = r'[^\w+]'
+    pattern = r"[^\w+]"
     return re.sub(pattern, "-", s)
+
+
+ad_rubrics = db.Table(
+    "ad_rubrics",
+    db.Column("ad_id", db.Integer, db.ForeignKey("ad.id")),
+    db.Column("rubric_id", db.Integer, db.ForeignKey("rubric.id")),
+)
 
 
 class Ad(db.Model):
@@ -19,12 +26,14 @@ class Ad(db.Model):
         if self.title:
             self.slug = slugify(self.title)
 
+    rubrics = db.relationship("Rubric", secondary=ad_rubrics, backref=db.backref('ads'), lazy='dynamic')
+
     def __init__(self, *args, **kwargs):
         super(Ad, self).__init__(*args, **kwargs)
         self.generate_slug()
 
     def __repr__(self):
-        return f'<Ad id: {self.id}, title: {self.title}>'
+        return f"<Ad id: {self.id}, title: {self.title}>"
 
 
 class Rubric(db.Model):
@@ -37,4 +46,4 @@ class Rubric(db.Model):
         self.slug = slugify(self.name)
 
     def __repr__(self):
-        return f'<Rubric id: {self.id}, name {self.name}>'
+        return f"<Rubric id: {self.id}, name {self.name}>"

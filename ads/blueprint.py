@@ -3,17 +3,33 @@ from flask import render_template
 
 from models import Ad, Rubric
 from .forms import AdForm
+from app import db
 
 from flask import request
+from flask import redirect
+from flask import url_for
 
 
 ads = Blueprint("ads", __name__, template_folder="templates")
 
 
-@ads.route('/create')
+@ads.route('/create', methods=['POST', 'GET'])
 def create_ad():
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+
+        try:
+            ad = Ad(title=title, body=body)
+            db.session.add(ad)
+            db.session.commit()
+        except:
+            print("Unsuccessfully")
+
+        return redirect(url_for('ads.index'))
+
     form = AdForm()
-    return render_template('create_ad.html', form=form)
+    return render_template('ads/create_ad.html', form=form)
 
 
 @ads.route("/")
@@ -22,7 +38,7 @@ def index():
     if q:
         adv = Ad.query.filter(Ad.title.contains(q) | Ad.body.contains(q)).all()
     else:
-        adv = Ad.query.all()
+        adv = Ad.query.order_by(Ad.created.desc())
     return render_template("ads/index.html", ads=adv)
 
 

@@ -9,7 +9,7 @@ Create new ad
 
 {% block content %}
     <div class="col-md-6">
-        <form action="{{url_for('ads.create_ad')}}, method ='Post'">
+        <form action="{{url_for('ads.create_ad')}}", method ='POST'>
 
             {% for field in form %}
             <div class="form-group">

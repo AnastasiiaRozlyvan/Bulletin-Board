@@ -4,8 +4,8 @@ import re
 
 
 def slugify(s):
-    pattern = r"[^\w+]"
-    return re.sub(pattern, "-", s)
+    pattern = r'[^\w+]'
+    return re.sub(pattern, "-", str(s))
 
 
 ad_rubrics = db.Table(
@@ -20,7 +20,7 @@ class Ad(db.Model):
     title = db.Column(db.String(140))
     slug = db.Column(db.String(140), unique=True)
     body = db.Column(db.Text)
-    created = db.Column(db.DateTime, default=datetime.now())
+    created = db.Column(db.DateTime, default=datetime.now)
 
     def generate_slug(self):
         if self.title:
@@ -43,7 +43,11 @@ class Rubric(db.Model):
 
     def __init__(self, *args, **kwargs):
         super(Rubric, self).__init__(*args, **kwargs)
-        self.slug = slugify(self.name)
+        self.generate_slug()
+
+    def generate_slug(self):
+        if self.name:
+            self.slug = slugify(self.name)
 
     def __repr__(self):
-        return f"<Rubric id: {self.id}, name {self.name}>"
+        return f"{self.name}"

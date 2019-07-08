@@ -32,6 +32,19 @@ def create_ad():
     return render_template('ads/create_ad.html', form=form)
 
 
+@ads.route('/<slug>/edit/', methods=['POST', 'GET'])
+def edit_ad(slug):
+    ad = Ad.query.filter(Ad.slug == slug).first()
+    if request.method == "POST":
+        ad.title = request.form['title']
+        ad.body = request.form['body']
+        db.session.commit()
+        return redirect(url_for('ads.ad_detail', slug=ad.slug))
+
+    form = AdForm(obj=ad)
+    return render_template('ads/edit_ad.html', ad=ad, form=form)
+
+
 @ads.route("/")
 def index():
     q = request.args.get('q')

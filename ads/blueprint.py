@@ -35,11 +35,20 @@ def create_ad():
 @ads.route("/")
 def index():
     q = request.args.get('q')
+
+    page = request.args.get('page')
+    if page and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
+
     if q:
-        adv = Ad.query.filter(Ad.title.contains(q) | Ad.body.contains(q)).all()
+        adv = Ad.query.filter(Ad.title.contains(q) | Ad.body.contains(q))
     else:
         adv = Ad.query.order_by(Ad.created.desc())
-    return render_template("ads/index.html", ads=adv)
+    pages = adv.paginate(page=page, per_page=5)
+
+    return render_template("ads/index.html", pages=pages)
 
 
 @ads.route("/<slug>")

@@ -3,6 +3,9 @@ from datetime import datetime
 import re
 
 
+from flask_security import UserMixin, RoleMixin
+
+
 def slugify(s):
     pattern = r'[^\w+]'
     return re.sub(pattern, "-", str(s))
@@ -51,3 +54,10 @@ class Rubric(db.Model):
 
     def __repr__(self):
         return f"{self.name}"
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())

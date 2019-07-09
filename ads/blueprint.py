@@ -10,10 +10,14 @@ from flask import redirect
 from flask import url_for
 
 
+from flask_security import login_required
+
+
 ads = Blueprint("ads", __name__, template_folder="templates")
 
 
 @ads.route('/create', methods=['POST', 'GET'])
+@login_required
 def create_ad():
     if request.method == 'POST':
         title = request.form['title']
@@ -33,6 +37,7 @@ def create_ad():
 
 
 @ads.route('/<slug>/edit/', methods=['POST', 'GET'])
+@login_required
 def edit_ad(slug):
     ad = Ad.query.filter(Ad.slug == slug).first()
     if request.method == "POST":

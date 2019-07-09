@@ -3,9 +3,12 @@ from config import Configuration
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
+from flask_security import Security
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+
+from flask_security import SQLAlchemyUserDatastore
 
 
 app = Flask(__name__)
@@ -24,5 +27,8 @@ from models import *
 admin = Admin(app)
 admin.add_view(ModelView(Ad, db.session))
 admin.add_view(ModelView(Rubric, db.session))
+
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
 
 

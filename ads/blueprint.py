@@ -39,7 +39,7 @@ def create_ad():
 @ads.route('/<slug>/edit/', methods=['POST', 'GET'])
 @login_required
 def edit_ad(slug):
-    ad = Ad.query.filter(Ad.slug == slug).first()
+    ad = Ad.query.filter(Ad.slug == slug).first_or_404()
     if request.method == "POST":
         ad.title = request.form['title']
         ad.body = request.form['body']
@@ -71,14 +71,14 @@ def index():
 
 @ads.route("/<slug>")
 def ad_detail(slug):
-    ad = Ad.query.filter(Ad.slug == slug).first()
+    ad = Ad.query.filter(Ad.slug == slug).first_or_404()
     rubrics = ad.rubrics
     return render_template("ads/ad_detail.html", ad=ad, rubrics=rubrics)
 
 
 @ads.route("/rubric/<slug>")
 def rubric_detail(slug):
-    rubric = Rubric.query.filter(Rubric.slug == slug).first()
+    rubric = Rubric.query.filter(Rubric.slug == slug).first_or_404()
     adv = rubric.ads
     return render_template("ads/rubric_detail.html", rubric=rubric, ads=adv)
 
